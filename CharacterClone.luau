@@ -134,19 +134,17 @@ local function accessorycheck()
 		local success = false
 		while not success do
 			success = pcall(function()
-				local thingname = thing.Name
-				if not newbody:FindFirstChild(thingname) then
+				if not newbody:FindFirstChild(thing.Name) then
 					if thing:IsA("Accessory") then
 						local handle = thing:FindFirstChild("Handle")
 						local aweld = handle.AccessoryWeld
-						local name = aweld.Part1.Name
-						if name ~= "Head" then
+						if aweld.Part1.Name ~= "Head" then
 							local hsize = handle.Size
 							if hsize.X * hsize.Y * hsize.Z < 48 then
 								local clone = thing:Clone()
-								clone.Name = thingname
+								clone.Name = thing.Name
 								clone.Parent = newbody
-								clone.Handle.AccessoryWeld.Part1 = newbody[name]
+								clone.Handle.AccessoryWeld.Part1 = newbody[aweld.Part1.Name]
 								clone.Handle.Transparency = transval
 								clone.Handle.CastShadow = lockfirstperson
 							end
@@ -192,7 +190,7 @@ local function accessorycheck()
 										v.Transparency = transval
 										if ispart then
 											v.CastShadow = lockfirstperson
-
+											
 											v.CanTouch = false											
 											v.AudioCanCollide = false
 											v.EnableFluidForces = false
@@ -212,6 +210,8 @@ local function accessorycheck()
 		end
 	end
 end
+
+accessorycheck()
 
 local toolequipped
 
@@ -247,9 +247,11 @@ local function updatecf()
 	newtorso.CFrame = rootcf * rootpartcf:ToObjectSpace(torso.CFrame)
 end
 
+updatecf()
+
 --Using character.childadded doesnt work consistently for some reason
 
-local HEAVY_TASK_INTERVAL = 0.5
+local HEAVY_TASK_INTERVAL = 1--0.5
 
 local lastExecutionTime = 0
 
@@ -262,9 +264,9 @@ game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
 	--newrootpart.CanCollide = false
 
 	if not lockfirstperson then return end
-
+	
 	updatecf()
-
+	
 	local currentTime = tick()
 
 	if currentTime - lastExecutionTime >= HEAVY_TASK_INTERVAL then
@@ -323,12 +325,10 @@ chead:GetPropertyChangedSignal("LocalTransparencyModifier"):Connect(function()
 					if isbasepart then
 						v.CastShadow = find.CastShadow
 					end
-					if toolequipped then
-						newleftarm.Transparency = 1
-						newleftarm.CastShadow = false
-						newrightarm.Transparency = 1
-						newrightarm.CastShadow = false
-					end
+				end
+				if toolequipped and (v.Name == "Left Arm" or v.Name == "Right Arm") then
+					v.Transparency = 1--find.Transparency
+					v.CastShadow = false--find.CastShadow
 				end
 			end
 		end
