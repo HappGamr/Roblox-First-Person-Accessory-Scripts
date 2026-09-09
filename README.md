@@ -1,4 +1,12 @@
-ai generated readme
+installation:
+1. copy one of the scripts
+2. create a localscript in startercharacterscripts
+3. paste the script in the localscript
+
+this is only a proof of concept. the character clone method especially needs to be optimized.
+
+
+VVV ai generated readme VVV
 
 # Roblox-First-Person-Accessory-Scripts
 My Roblox First Person View Accessory Scripts
